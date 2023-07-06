@@ -1,6 +1,6 @@
 <template>
   <div id="main-container">
-    <div class="menu-container">
+    <div class="menu-container" v-if="!foodMenu">
       <div class="cafe-name-heading">
         <div class="text-container"><h2 class="cafe-name">Sample-Cafe</h2></div>
       </div>
@@ -36,13 +36,21 @@
           </div>
           <div class="quantity-container">
             <div class="btn-container">
-              <button class="quantity-btn" @click="quantity(+1, cafeMenu)">
+              <button
+                class="quantity-btn"
+                @click="quantity(+1, cafeMenu)"
+              >
                 +
               </button>
             </div>
             <div class="quantity-figure">{{ cafeMenu.itemQuantity }}</div>
             <div class="btn-container">
-              <button class="quantity-btn" @click="quantity(-1)">-</button>
+              <button
+                class="quantity-btn"
+                @click="quantity(-1, cafeMenu)"
+              >
+                -
+              </button>
             </div>
           </div>
         </div>
@@ -52,18 +60,19 @@
         <div class="total-price">Rs {{ totalPrice }}</div>
       </div>
     </div>
+    <PlaceOrder v-if="orderPlaced" @back="backToMain" />
   </div>
 </template>
 <script>
 import axios from "axios";
+import PlaceOrder from "./PlaceOrder.vue";
 export default {
-  components: {},
+  components: { PlaceOrder },
   data() {
     return {
+      orderPlaced: false,
       cafeMenu: [],
-      number: 0,
-      menuItem: "food item ",
-      menuItemPrice: 25,
+      foodMenu: false,
       totalPrice: 0,
     };
   },
@@ -77,17 +86,38 @@ export default {
       );
       this.cafeMenu = response.data;
     },
-    async placeOrder() {
-      await this.$router.push({ path: "/placeOrder" });
+    placeOrder() {
+      this.foodMenu = true;
+      this.orderPlaced = true;
     },
-    quantity(value, cafeMenu) {
-      if (value === -1 && this.number !== 0) {
-        this.number = this.number + value;
+    async quantity(value,cafeMenu) {
+      if (value === -1 && cafeMenu.itemQuantity !== 0) {
+        let data = {
+          _id: cafeMenu._id,
+          itemQuantity: value + cafeMenu.itemQuantity,
+        };
+        let response = await axios.patch(
+          "http://localhost:3000/api/foodItems/updateQuantity",
+          data
+        );
+        this.getMenuList();
       }
       if (value === +1) {
-        this.number = this.number + value;
+        let data = {
+          _id: cafeMenu._id,
+          itemQuantity: value + cafeMenu.itemQuantity,
+        };
+        let response = await axios.patch(
+          "http://localhost:3000/api/foodItems/updateQuantity",
+          data
+        );
+        this.getMenuList();
       }
       this.totalPrice = this.menuItemPrice * this.number;
+    },
+    backToMain(n) {
+      this.foodMenu = n;
+      this.orderPlaced = false;
     },
   },
 };
