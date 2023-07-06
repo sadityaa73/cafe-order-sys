@@ -20,51 +20,76 @@
         </div>
       </div>
       <div class="food-menu-container">
-        <div class="menu-content">
+        <div
+          class="menu-content"
+          v-for="(cafeMenu, index) in cafeMenu"
+          :key="index"
+        >
           <div class="menu-text-and-img">
             <div class="menu-img">
               <img src="" alt="image" />
             </div>
             <div class="menu-text">
-              <p class="menu-item-text">{{ menuItem }}</p>
-              <p class="menu-item-text">{{ menuItemPrice }} kg</p>
+              <p class="menu-item-text">{{ cafeMenu.itemName }}</p>
+              <p class="menu-item-text">Rs {{ cafeMenu.itemPrice }} kg</p>
             </div>
           </div>
           <div class="quantity-container">
             <div class="btn-container">
-              <button class="quantity-btn">+</button>
+              <button class="quantity-btn" @click="quantity(+1, cafeMenu)">
+                +
+              </button>
             </div>
-            <div class="quantity-figure">{{ number }}</div>
+            <div class="quantity-figure">{{ cafeMenu.itemQuantity }}</div>
             <div class="btn-container">
-              <button class="quantity-btn">-</button>
+              <button class="quantity-btn" @click="quantity(-1)">-</button>
             </div>
           </div>
         </div>
       </div>
       <div class="order-Btn-Container">
         <button class="Order-Btn" @click="placeOrder">Place Order</button>
-        <div class="total-price">{{ totalPrice }}</div>
+        <div class="total-price">Rs {{ totalPrice }}</div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   components: {},
   data() {
     return {
+      cafeMenu: [],
       number: 0,
       menuItem: "food item ",
       menuItemPrice: 25,
       totalPrice: 0,
     };
   },
-  methods:{
-    async placeOrder()
-    {
-      await this.$router.push({path:'/placeOrder'}); 
-    }
-  }
+  created() {
+    this.getMenuList();
+  },
+  methods: {
+    async getMenuList() {
+      let response = await axios.get(
+        "http://localhost:3000/api/foodItems/menuItems"
+      );
+      this.cafeMenu = response.data;
+    },
+    async placeOrder() {
+      await this.$router.push({ path: "/placeOrder" });
+    },
+    quantity(value, cafeMenu) {
+      if (value === -1 && this.number !== 0) {
+        this.number = this.number + value;
+      }
+      if (value === +1) {
+        this.number = this.number + value;
+      }
+      this.totalPrice = this.menuItemPrice * this.number;
+    },
+  },
 };
 </script>
 <style scoped>
@@ -160,6 +185,7 @@ export default {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
 }
 .menu-content {
   border: 1px solid black;
@@ -223,6 +249,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   min-height: max-content;
+  margin: 9px;
 }
 .Order-Btn {
   width: max-content;

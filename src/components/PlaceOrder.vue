@@ -22,7 +22,7 @@
                 </div>
               </div>
               <div class="order-Btn-Container">
-                <button class="Order-Btn" @click="PayNow">Pay</button>
+                <button class="Order-Btn" @click="payNow">Pay</button>
                 <div class="total-price">Rs {{ totalAmount }}</div>
               </div>
         </div>
@@ -40,6 +40,9 @@ export default{
             itemPrice:50,
             totalAmount:50,
         }
+    },
+    methods:{
+        payNow(){}
     }
 }
 </script>
