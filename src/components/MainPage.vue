@@ -36,19 +36,13 @@
           </div>
           <div class="quantity-container">
             <div class="btn-container">
-              <button
-                class="quantity-btn"
-                @click="quantity(+1, cafeMenu)"
-              >
+              <button class="quantity-btn" @click="quantity(+1, cafeMenu)">
                 +
               </button>
             </div>
             <div class="quantity-figure">{{ cafeMenu.itemQuantity }}</div>
             <div class="btn-container">
-              <button
-                class="quantity-btn"
-                @click="quantity(-1, cafeMenu)"
-              >
+              <button class="quantity-btn" @click="quantity(-1, cafeMenu)">
                 -
               </button>
             </div>
@@ -90,7 +84,7 @@ export default {
       this.foodMenu = true;
       this.orderPlaced = true;
     },
-    async quantity(value,cafeMenu) {
+    async quantity(value, cafeMenu) {
       if (value === -1 && cafeMenu.itemQuantity !== 0) {
         let data = {
           _id: cafeMenu._id,
@@ -101,6 +95,9 @@ export default {
           data
         );
         this.getMenuList();
+        if (cafeMenu.itemQuantity >= 0) {
+          this.totalPrice = cafeMenu.itemQuantity * cafeMenu.itemPrice;
+        }
       }
       if (value === +1) {
         let data = {
@@ -112,8 +109,10 @@ export default {
           data
         );
         this.getMenuList();
+        if (cafeMenu.itemQuantity >= 0) {
+          this.totalPrice += cafeMenu.itemQuantity * cafeMenu.itemPrice;
+        }
       }
-      this.totalPrice = this.menuItemPrice * this.number;
     },
     backToMain(n) {
       this.foodMenu = n;
