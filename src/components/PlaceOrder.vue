@@ -72,7 +72,7 @@ export default {
   min-height: 70%;
   max-height: 85%;
   box-shadow: 8px 17px 22px 0px;
-  background: #f4f4f4;
+  background: whitesmoke;
 }
 .cafe-name-heading {
   border: 1px solid black;
@@ -103,12 +103,13 @@ export default {
   flex-direction: column;
 }
 .menu-content {
-  border: 1px solid black;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 6px;
   border-radius: 10px;
+  background: #f5f0ff;
+  box-shadow: 0px 2px 4px 1px #898989;
 }
 .menu-text-and-img {
   min-width: 70%;

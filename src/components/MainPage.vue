@@ -31,18 +31,18 @@
             </div>
             <div class="menu-text">
               <p class="menu-item-text">{{ cafeMenu.itemName }}</p>
-              <p class="menu-item-text">Rs {{ cafeMenu.itemPrice }} kg</p>
+              <p class="menu-item-text">Rs {{ cafeMenu.itemPrice }}</p>
             </div>
           </div>
           <div class="quantity-container">
             <div class="btn-container">
-              <button class="quantity-btn" @click="quantity(+1, cafeMenu)">
+              <button class="quantity-btn" @click="increase(+1, cafeMenu)">
                 +
               </button>
             </div>
             <div class="quantity-figure">{{ cafeMenu.itemQuantity }}</div>
             <div class="btn-container">
-              <button class="quantity-btn" @click="quantity(-1, cafeMenu)">
+              <button class="quantity-btn" @click="decrease(-1, cafeMenu)">
                 -
               </button>
             </div>
@@ -84,35 +84,27 @@ export default {
       this.foodMenu = true;
       this.orderPlaced = true;
     },
-    async quantity(value, cafeMenu) {
-      if (value === -1 && cafeMenu.itemQuantity !== 0) {
+    async increase(value, cafeMenu) {
         let data = {
           _id: cafeMenu._id,
-          itemQuantity: value + cafeMenu.itemQuantity,
+          itemQuantity:cafeMenu.itemQuantity + 1,
         };
         let response = await axios.patch(
           "http://localhost:3000/api/foodItems/updateQuantity",
           data
         );
         this.getMenuList();
-        if (cafeMenu.itemQuantity >= 0) {
-          this.totalPrice = cafeMenu.itemQuantity * cafeMenu.itemPrice;
-        }
-      }
-      if (value === +1) {
+      },
+      async decrease(value,cafeMenu){
         let data = {
           _id: cafeMenu._id,
-          itemQuantity: value + cafeMenu.itemQuantity,
+          itemQuantity:cafeMenu.itemQuantity - 1,
         };
         let response = await axios.patch(
           "http://localhost:3000/api/foodItems/updateQuantity",
           data
         );
         this.getMenuList();
-        if (cafeMenu.itemQuantity >= 0) {
-          this.totalPrice += cafeMenu.itemQuantity * cafeMenu.itemPrice;
-        }
-      }
     },
     backToMain(n) {
       this.foodMenu = n;
@@ -140,7 +132,7 @@ export default {
   min-height: 70%;
   max-height: 85%;
   box-shadow: 8px 17px 22px 0px;
-  background: #f4f4f4;
+  background: whitesmoke;
 }
 .cafe-name-heading {
   border: 1px solid black;
@@ -207,7 +199,8 @@ export default {
   margin-left: 2%;
 }
 .food-menu-container {
-  border: 1px solid black;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
   min-width: 97%;
   min-height: 42vh;
   margin: 8px;
@@ -217,12 +210,13 @@ export default {
   overflow-x: auto;
 }
 .menu-content {
-  border: 1px solid black;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 6px;
   border-radius: 10px;
+  background: #f5f0ff;
+  box-shadow: 0px 2px 4px 1px #898989;
 }
 .menu-text-and-img {
   min-width: 70%;
