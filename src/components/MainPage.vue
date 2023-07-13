@@ -27,24 +27,24 @@
         >
           <div class="menu-text-and-img">
             <div class="menu-img">
-              <img src="" alt="image" />
+              <img
+                :src="cafeMenu.file"
+                alt="image"
+                style="width:100%;height=100%"
+              />
             </div>
             <div class="menu-text">
-              <p class="menu-item-text">{{ cafeMenu.itemName }}</p>
-              <p class="menu-item-text">Rs {{ cafeMenu.itemPrice }}</p>
+              <p class="menu-item-text">{{ cafeMenu.productName }}</p>
+              <p class="menu-item-text">Rs {{ cafeMenu.productPrice }}</p>
             </div>
           </div>
           <div class="quantity-container">
             <div class="btn-container">
-              <button class="quantity-btn" @click="increase(+1, cafeMenu)">
-                +
-              </button>
+              <button class="quantity-btn">+</button>
             </div>
-            <div class="quantity-figure">{{ cafeMenu.itemQuantity }}</div>
+            <div class="quantity-figure">{{ cafeMenu.productQuantity }}</div>
             <div class="btn-container">
-              <button class="quantity-btn" @click="decrease(-1, cafeMenu)">
-                -
-              </button>
+              <button class="quantity-btn">-</button>
             </div>
           </div>
         </div>
@@ -75,36 +75,13 @@ export default {
   },
   methods: {
     async getMenuList() {
-      let response = await axios.get(
-        "http://localhost:3000/api/foodItems/menuItems"
-      );
+      let response = await axios.get("http://localhost:3000/api/menu");
       this.cafeMenu = response.data;
+      console.log(this.cafeMenu);
     },
     placeOrder() {
       this.foodMenu = true;
       this.orderPlaced = true;
-    },
-    async increase(value, cafeMenu) {
-        let data = {
-          _id: cafeMenu._id,
-          itemQuantity:cafeMenu.itemQuantity + 1,
-        };
-        let response = await axios.patch(
-          "http://localhost:3000/api/foodItems/updateQuantity",
-          data
-        );
-        this.getMenuList();
-      },
-      async decrease(value,cafeMenu){
-        let data = {
-          _id: cafeMenu._id,
-          itemQuantity:cafeMenu.itemQuantity - 1,
-        };
-        let response = await axios.patch(
-          "http://localhost:3000/api/foodItems/updateQuantity",
-          data
-        );
-        this.getMenuList();
     },
     backToMain(n) {
       this.foodMenu = n;
@@ -231,19 +208,28 @@ export default {
   margin: 1px;
 }
 .menu-img {
-  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid black; */
   min-width: 62px;
+  max-width: 62px;
   min-height: 55px;
   margin: 9px;
+  box-shadow: 0px 1px 2px 0px;
   border-radius: 6px;
 }
 .menu-text {
   width: 100%;
-  border: 1px solid;
+  min-height: 55px;
+  max-height: 55px;
+  /* border: 1px solid;*/
+  border-radius: 6px;
   margin: 3px;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   align-items: flex-start;
   display: flex;
+  box-shadow: 0px 1px 2px 0px;
   flex-direction: column;
 }
 .quantity-container {
