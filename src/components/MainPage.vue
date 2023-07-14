@@ -12,14 +12,21 @@
           /></span>
         </div>
         <div class="food-categories-tab">
-          <button class="tab-buttons">BreakFast</button>
-          <button class="tab-buttons">snacks</button>
-          <button class="tab-buttons">Lunch</button>
-          <button class="tab-buttons">Brevrages</button>
-          <button class="tab-buttons">Dips</button>
+          <button class="tab-buttons" @click="getAllTypes">
+            All
+          </button>
+          <button class="tab-buttons" @click="getMenu('Breakfast')">
+            BreakFast
+          </button>
+          <button class="tab-buttons" @click="getMenu('Snacks')">snacks</button>
+          <button class="tab-buttons" @click="getMenu('Lunch')">Lunch</button>
+          <button class="tab-buttons" @click="getMenu('Brevrage')">
+            Brevrages
+          </button>
+          <button class="tab-buttons" @click="getMenu('Dips')">Dips</button>
         </div>
       </div>
-      <div class="food-menu-container">
+      <div class="food-menu-container" v-if="allTypes">
         <div
           class="menu-content"
           v-for="(cafeMenu, index) in cafeMenu"
@@ -30,7 +37,7 @@
               <img
                 :src="cafeMenu.file"
                 alt="image"
-                style="width:100%;height=100%"
+                style="width: 100%; height: 6vh"
               />
             </div>
             <div class="menu-text">
@@ -43,6 +50,36 @@
               <button class="quantity-btn">+</button>
             </div>
             <div class="quantity-figure">{{ cafeMenu.productQuantity }}</div>
+            <div class="btn-container">
+              <button class="quantity-btn">-</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="food-menu-container" v-if="selectedType">
+        <div
+          class="menu-content"
+          v-for="(menuList, index) in menuList"
+          :key="index"
+        >
+          <div class="menu-text-and-img">
+            <div class="menu-img">
+              <img
+                :src="menuList.file"
+                alt="image"
+                style="width: 100%; height: 6vh"
+              />
+            </div>
+            <div class="menu-text">
+              <p class="menu-item-text">{{ menuList.productName }}</p>
+              <p class="menu-item-text">Rs {{ menuList.productPrice }}</p>
+            </div>
+          </div>
+          <div class="quantity-container">
+            <div class="btn-container">
+              <button class="quantity-btn">+</button>
+            </div>
+            <div class="quantity-figure">{{ menuList.productQuantity }}</div>
             <div class="btn-container">
               <button class="quantity-btn">-</button>
             </div>
@@ -66,6 +103,9 @@ export default {
     return {
       orderPlaced: false,
       cafeMenu: [],
+      selectedType: false,
+      allTypes: true,
+      menuList: [],
       foodMenu: false,
       totalPrice: 0,
     };
@@ -77,7 +117,21 @@ export default {
     async getMenuList() {
       let response = await axios.get("http://localhost:3000/api/menu");
       this.cafeMenu = response.data;
-      console.log(this.cafeMenu);
+    },
+    getAllTypes()
+    {
+       this.allTypes = true;
+       this.selectedType = false;
+    },
+    getMenu(selected) {
+      console.log(selected);
+      // debugger;
+      this.allTypes = false;
+      this.selectedType = true;
+      this.menuList = this.cafeMenu.filter(
+        (element) => element.productType === selected
+      );
+      console.log("print menu list", this.menuList);
     },
     placeOrder() {
       this.foodMenu = true;
@@ -104,8 +158,8 @@ export default {
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  max-width: 70%;
-  min-width: 60%;
+  max-width: 55%;
+  min-width: 40%;
   min-height: 70%;
   max-height: 85%;
   box-shadow: 8px 17px 22px 0px;
