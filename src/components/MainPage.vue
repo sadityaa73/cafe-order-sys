@@ -12,9 +12,7 @@
           /></span>
         </div>
         <div class="food-categories-tab">
-          <button class="tab-buttons" @click="getAllTypes">
-            All
-          </button>
+          <button class="tab-buttons" @click="getAllTypes">All</button>
           <button class="tab-buttons" @click="getMenu('Breakfast')">
             BreakFast
           </button>
@@ -47,11 +45,33 @@
           </div>
           <div class="quantity-container">
             <div class="btn-container">
-              <button class="quantity-btn">+</button>
+              <button
+                class="quantity-btn"
+                @click="
+                  increaseQuantity(
+                    cafeMenu._id,
+                    cafeMenu.productQuantity,
+                    cafeMenu.productPrice
+                  )
+                "
+              >
+                +
+              </button>
             </div>
             <div class="quantity-figure">{{ cafeMenu.productQuantity }}</div>
             <div class="btn-container">
-              <button class="quantity-btn">-</button>
+              <button
+                class="quantity-btn"
+                @click="
+                  decreaseQuantity(
+                    cafeMenu._id,
+                    cafeMenu.productQuantity,
+                    cafeMenu.productPrice
+                  )
+                "
+              >
+                -
+              </button>
             </div>
           </div>
         </div>
@@ -77,18 +97,40 @@
           </div>
           <div class="quantity-container">
             <div class="btn-container">
-              <button class="quantity-btn">+</button>
+              <button
+                class="quantity-btn"
+                @click="
+                  increaseQuantity(
+                    cafeMenu._id,
+                    cafeMenu.productQuantity,
+                    cafeMenu.productPrice
+                  )
+                "
+              >
+                +
+              </button>
             </div>
             <div class="quantity-figure">{{ menuList.productQuantity }}</div>
             <div class="btn-container">
-              <button class="quantity-btn">-</button>
+              <button
+                class="quantity-btn"
+                @click="
+                  decreaseQuantity(
+                    cafeMenu._id,
+                    cafeMenu.productQuantity,
+                    cafeMenu.productPrice
+                  )
+                "
+              >
+                -
+              </button>
             </div>
           </div>
         </div>
       </div>
       <div class="order-Btn-Container">
         <button class="Order-Btn" @click="placeOrder">Place Order</button>
-        <div class="total-price">Rs {{ totalPrice }}</div>
+        <div class="total-price">Rs {{ this.totalPrice }}</div>
       </div>
     </div>
     <PlaceOrder v-if="orderPlaced" @back="backToMain" />
@@ -114,29 +156,52 @@ export default {
     this.getMenuList();
   },
   methods: {
+    // main api for get list of all the items ;
     async getMenuList() {
       let response = await axios.get("http://localhost:3000/api/menu");
       this.cafeMenu = response.data;
     },
-    getAllTypes()
-    {
-       this.allTypes = true;
-       this.selectedType = false;
+    getAllTypes() {
+      this.allTypes = true;
+      this.selectedType = false;
     },
+    //function for filter the menu items upon the selected tabs ;
     getMenu(selected) {
-      console.log(selected);
-      // debugger;
       this.allTypes = false;
       this.selectedType = true;
       this.menuList = this.cafeMenu.filter(
         (element) => element.productType === selected
       );
-      console.log("print menu list", this.menuList);
+    },
+    async increaseQuantity(id, quantity, price) {
+      let update = {
+        _id: id,
+        productQuantity: quantity + 1,
+      };
+      let response = await axios.patch(
+        "http://localhost:3000/api/menu/update",
+        update
+      );
+      await this.getMenuList();
+    },
+    async decreaseQuantity(id, quantity, price) {
+      if (quantity != 0) {
+        let update = {
+          _id: id,
+          productQuantity: quantity - 1,
+        };
+        let response = await axios.patch(
+          "http://localhost:3000/api/menu/update",
+          update
+        );
+        await this.getMenuList();
+      }
     },
     placeOrder() {
       this.foodMenu = true;
       this.orderPlaced = true;
     },
+
     backToMain(n) {
       this.foodMenu = n;
       this.orderPlaced = false;
@@ -151,6 +216,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #cdc6fa;
 }
 .menu-container {
   border-radius: 13px;
@@ -161,13 +227,13 @@ export default {
   max-width: 55%;
   min-width: 40%;
   min-height: 70%;
-  max-height: 85%;
+  max-height: 70%;
   box-shadow: 8px 17px 22px 0px;
   background: whitesmoke;
 }
 .cafe-name-heading {
   border: 1px solid black;
-  min-width: 97%;
+  min-width: 60%;
   min-height: 8vh;
   margin: 8px;
   border-radius: 5px;
@@ -222,10 +288,10 @@ export default {
 }
 .tab-buttons {
   width: max-content;
-  font-size: 22px;
+  font-size: 16px;
   font-family: popins;
   border-radius: 5px;
-  color: lightgreen;
+  color: white;
   background: #4f89ea;
   margin-left: 2%;
 }
@@ -256,7 +322,7 @@ export default {
   align-items: center;
 }
 .menu-item-text {
-  font-size: 16px;
+  font-size: 14px;
   font-family: popins;
   color: black;
   margin: 1px;
@@ -312,21 +378,46 @@ export default {
   justify-content: space-between;
   align-items: center;
   min-height: max-content;
-  margin: 9px;
+  margin-bottom: 9px
 }
 .Order-Btn {
   width: max-content;
-  font-size: 24px;
+  font-size: 16px;
   font-family: popins;
-  color: lightgreen;
+  color: white;
   background: #4f89ea;
   border-radius: 5px;
   margin-left: 8%;
 }
 .total-price {
-  font-size: 25px;
+  font-size: 16px;
   font-family: popins;
   min-width: 7%;
   margin-right: 8%;
 }
+
+@media (max-width: 1146px) {
+  .menu-container {
+    min-width: 50%;
+    min-height: 70%;
+  }
+}
+@media (max-width: 927px) {
+  .menu-container {
+    min-width: 70%;
+    min-height: 70%;
+  }
+}
+@media (max-width: 667px) {
+  .menu-container {
+    min-width: 90%;
+    min-height: 70%;
+  }
+}
+@media (max-width: 313px) {
+  .cafe-name {
+    font-size: 36px;
+  }
+}
+
 </style>
