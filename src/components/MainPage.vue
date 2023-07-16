@@ -133,7 +133,7 @@
         <div class="total-price">Rs {{ this.totalPrice }}</div>
       </div>
     </div>
-    <PlaceOrder v-if="orderPlaced" @back="backToMain" />
+    <PlaceOrder v-if="orderPlaced" @back="backToMain" :cart="cart" />
   </div>
 </template>
 <script>
@@ -148,6 +148,7 @@ export default {
       selectedType: false,
       allTypes: true,
       menuList: [],
+      cart: [],
       foodMenu: false,
       totalPrice: 0,
     };
@@ -173,6 +174,7 @@ export default {
         (element) => element.productType === selected
       );
     },
+    //funciton for increase order Amount;
     async increaseQuantity(id, quantity, price) {
       let update = {
         _id: id,
@@ -184,6 +186,7 @@ export default {
       );
       await this.getMenuList();
     },
+    //function from decrase oreder amount;
     async decreaseQuantity(id, quantity, price) {
       if (quantity != 0) {
         let update = {
@@ -197,13 +200,18 @@ export default {
         await this.getMenuList();
       }
     },
-    placeOrder() {
+    //funtion for placeing order;
+    async placeOrder() {
+      this.cart = this.cafeMenu.filter(
+        (element) => element.productQuantity > 0
+      );
+      console.log("printing cart after putting data in it", this.cart);
       this.foodMenu = true;
       this.orderPlaced = true;
     },
 
-    backToMain(n) {
-      this.foodMenu = n;
+    backToMain(emitEvent) {
+      this.foodMenu = emitEvent;
       this.orderPlaced = false;
     },
   },
@@ -282,7 +290,7 @@ export default {
   justify-content: center;
   align-items: center;
   margin: 2px;
-  cursor:pointer;
+  cursor: pointer;
 }
 .food-categories-tab {
   width: 100%;
@@ -295,11 +303,11 @@ export default {
   color: white;
   background: #4f89ea;
   margin-left: 2%;
-  cursor:pointer;
+  cursor: pointer;
 }
-.tab-buttons:hover{
+.tab-buttons:hover {
   background-color: green;
-  font-size:20px;
+  font-size: 20px;
 }
 .food-menu-container {
   border-top: 1px solid;
@@ -372,9 +380,9 @@ export default {
   justify-content: center;
   align-items: center;
   display: flex;
-  cursor:pointer;
+  cursor: pointer;
 }
-.quantity-btn:active{
+.quantity-btn:active {
   background-color: red;
 }
 .quantity-figure {
@@ -388,7 +396,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   min-height: max-content;
-  margin-bottom: 9px
+  margin-bottom: 9px;
 }
 .Order-Btn {
   width: max-content;
@@ -398,10 +406,10 @@ export default {
   background: #4f89ea;
   border-radius: 5px;
   margin-left: 8%;
-  cursor:pointer;
+  cursor: pointer;
 }
-.Order-Btn:active{
-  background-color:green;
+.Order-Btn:active {
+  background-color: green;
 }
 .total-price {
   font-size: 16px;
@@ -433,5 +441,4 @@ export default {
     font-size: 36px;
   }
 }
-
 </style>

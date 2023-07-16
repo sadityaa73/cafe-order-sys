@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import PlaceOrder from '../components/PlaceOrder.vue'
+import CheckOut from '../components/CheckOut.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes = [
     path:'/placeOrder',
     name:"placeOrder",
     component: PlaceOrder
+  },
+  {
+    path:'/CheckOut',
+    name:'CheckOut',
+    component:CheckOut
   }
 ]
 

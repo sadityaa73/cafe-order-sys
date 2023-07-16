@@ -5,26 +5,26 @@
         <div class="text-container"><h2 class="cafe-name">Sample-Cafe</h2></div>
       </div>
       <div class="food-menu-container">
-        <div class="menu-content">
+        <div class="menu-content" v-for="(cart ,index) in cart" :key="index">
           <div class="menu-text-and-img">
             <div class="menu-img">
-              <img src="" alt="image" />
+              <img :src="cart.file" alt="image"  style="width: 100%; height: 6vh" />
             </div>
             <div class="menu-text">
-              <p class="menu-item-text">{{ menuItem }}</p>
-              <p class="menu-item-text">{{ menuItemPrice }} kg</p>
+              <p class="menu-item-text">{{ cart.productName }}</p>
+              <p class="menu-item-text">{{ cart.productPrice }} kg</p>
             </div>
           </div>
           <div class="quantity-container">
-            <div class="quantity-figure">{{ itemQuant }}pcs</div>
-            <div class="quantity-price">Rs {{ itemPrice }}</div>
+            <div class="quantity-figure">{{ cart.productQuantity }} <span style="fontSize:13px">pcs</span></div>
+            <div class="quantity-price">Rs {{ cart.productQuantity*cart.productPrice }}</div>
           </div>
         </div>
       </div>
       <div class="order-Btn-Container">
         <button class="Back-Button" @click="backToMainMenu">Back</button>
         <button class="Order-Btn" @click="payNow">Pay</button>
-        <div class="total-price">Rs {{ totalAmount }}</div>
+        <div class="total-price">Rs {{ this.totalAmount }}</div>
       </div>
     </div>
   </div>
@@ -33,6 +33,9 @@
 export default {
   name: "PlaceOrder",
   components: {},
+  props:{
+    cart:Array
+  },
   emit: ["back"],
   data() {
     return {
@@ -40,16 +43,30 @@ export default {
       menuItemPrice: 25,
       itemQuant: 2,
       itemPrice: 50,
-      totalAmount: 50,
+      totalAmount: 0,
       back: true,
     };
   },
+  created(){
+    console.log("printing cart from props",this.cart);
+    this.getTotalAmount();
+  },
   methods: {
-    payNow() {},
+    payNow() {
+      this.$router.push('/checkOut')
+    },
     backToMainMenu() {
       this.orderPlace = false;
       this.$emit("back");
     },
+    getTotalAmount(){
+      for(let i=0;i<this.cart.length;i++)
+      {
+        this.totalAmount += this.cart[i].productQuantity * this.cart[i].productPrice;
+      }
+      console.log("print total amount",this.totalAmount);
+      return this.totalAmount;
+    }
   },
 };
 </script>
@@ -62,6 +79,7 @@ export default {
   align-items: center;
   background-color: #cdc6fa;
 }
+
 .menu-container {
   border-radius: 13px;
   display: flex;
