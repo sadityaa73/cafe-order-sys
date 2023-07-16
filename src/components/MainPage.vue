@@ -282,6 +282,7 @@ export default {
   justify-content: center;
   align-items: center;
   margin: 2px;
+  cursor:pointer;
 }
 .food-categories-tab {
   width: 100%;
@@ -294,6 +295,11 @@ export default {
   color: white;
   background: #4f89ea;
   margin-left: 2%;
+  cursor:pointer;
+}
+.tab-buttons:hover{
+  background-color: green;
+  font-size:20px;
 }
 .food-menu-container {
   border-top: 1px solid;
@@ -366,6 +372,10 @@ export default {
   justify-content: center;
   align-items: center;
   display: flex;
+  cursor:pointer;
+}
+.quantity-btn:active{
+  background-color: red;
 }
 .quantity-figure {
   font-size: 19px;
@@ -388,6 +398,10 @@ export default {
   background: #4f89ea;
   border-radius: 5px;
   margin-left: 8%;
+  cursor:pointer;
+}
+.Order-Btn:active{
+  background-color:green;
 }
 .total-price {
   font-size: 16px;

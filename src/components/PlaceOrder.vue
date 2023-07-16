@@ -33,7 +33,7 @@
 export default {
   name: "PlaceOrder",
   components: {},
-  emit:['back'],
+  emit: ["back"],
   data() {
     return {
       menuItem: "foodItem",
@@ -41,14 +41,14 @@ export default {
       itemQuant: 2,
       itemPrice: 50,
       totalAmount: 50,
-      back:true,
+      back: true,
     };
   },
   methods: {
     payNow() {},
     backToMainMenu() {
-      this.orderPlace=false;
-      this.$emit('back')
+      this.orderPlace = false;
+      this.$emit("back");
     },
   },
 };
@@ -60,6 +60,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #cdc6fa;
 }
 .menu-container {
   border-radius: 13px;
@@ -67,16 +68,16 @@ export default {
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  max-width: 70%;
-  min-width: 60%;
+  max-width: 55%;
+  min-width: 40%;
   min-height: 70%;
-  max-height: 85%;
+  max-height: 70%;
   box-shadow: 8px 17px 22px 0px;
   background: whitesmoke;
 }
 .cafe-name-heading {
   border: 1px solid black;
-  min-width: 97%;
+  min-width: 60%;
   min-height: 8vh;
   margin: 8px;
   border-radius: 5px;
@@ -93,14 +94,61 @@ export default {
   color: lightgreen;
   margin: 0px;
 }
-.food-menu-container {
+.tab-and-search {
+  min-width: 97%;
+  min-height: 9vh;
+  margin: 8px;
+  margin-top: 0px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.search-bar-container {
   border: 1px solid black;
+  min-width: 50%;
+  min-height: 3vh;
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+}
+.search-bar {
+  width: 90%;
+  text-align: center;
+  font-size: 14px;
+}
+.search-btn {
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2px;
+}
+.food-categories-tab {
+  width: 100%;
+}
+.tab-buttons {
+  width: max-content;
+  font-size: 16px;
+  font-family: popins;
+  border-radius: 5px;
+  color: white;
+  background: #4f89ea;
+  margin-left: 2%;
+}
+.food-menu-container {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
   min-width: 97%;
   min-height: 42vh;
   margin: 8px;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
 }
 .menu-content {
   display: flex;
@@ -118,25 +166,34 @@ export default {
   align-items: center;
 }
 .menu-item-text {
-  font-size: 16px;
+  font-size: 14px;
   font-family: popins;
   color: black;
   margin: 1px;
 }
 .menu-img {
-  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid black; */
   min-width: 62px;
+  max-width: 62px;
   min-height: 55px;
   margin: 9px;
+  box-shadow: 0px 1px 2px 0px;
   border-radius: 6px;
 }
 .menu-text {
   width: 100%;
-  border: 1px solid;
+  min-height: 55px;
+  max-height: 55px;
+  /* border: 1px solid;*/
+  border-radius: 6px;
   margin: 3px;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   align-items: flex-start;
   display: flex;
+  box-shadow: 0px 1px 2px 0px;
   flex-direction: column;
 }
 .quantity-container {
@@ -151,41 +208,73 @@ export default {
   text-align: center;
   font-family: popins;
 }
-.quantity-price {
-  font-size: 19px;
-  text-align: center;
-  font-family: popins;
-}
 .order-Btn-Container {
   width: 97%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   min-height: max-content;
+  margin-bottom: 9px;
 }
-.Back-Button
-{
-  min-width: 18%;
-  font-size: 24px;
+.Order-Btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: 3vh;
+  font-size: 16px;
   font-family: popins;
-  color: lightgreen;
+  color: white;
   background: #4f89ea;
   border-radius: 5px;
   margin-left: 8%;
+  cursor: pointer;
 }
-.Order-Btn {
-  border: 1px solid black;
-  min-width: 20%;
-  font-size: 26px;
+.Order-Btn:active{
+  background-color:green;
+}
+.Back-Button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: 3vh;
+  font-size: 16px;
   font-family: popins;
-  color: lightgreen;
-  background: #4f89ea;
+  color: white;
+  background: #ee380f;
   border-radius: 5px;
+  margin-left: 8%;
+  cursor: pointer;
 }
 .total-price {
-  font-size: 25px;
+  font-size: 16px;
   font-family: popins;
   min-width: 7%;
   margin-right: 8%;
+}
+
+@media (max-width: 1146px) {
+  .menu-container {
+    min-width: 50%;
+    min-height: 70%;
+  }
+}
+@media (max-width: 927px) {
+  .menu-container {
+    min-width: 70%;
+    min-height: 70%;
+  }
+}
+@media (max-width: 667px) {
+  .menu-container {
+    min-width: 90%;
+    min-height: 70%;
+  }
+}
+@media (max-width: 313px) {
+  .cafe-name {
+    font-size: 36px;
+  }
 }
 </style>
