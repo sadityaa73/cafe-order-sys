@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     payNow() {
-      this.$router.push('/checkOut')
+      this.$router.push(`/checkOut/${this.totalAmount}`)
     },
     backToMainMenu() {
       this.orderPlace = false;

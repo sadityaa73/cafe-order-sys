@@ -18,7 +18,7 @@ const routes = [
     component: PlaceOrder
   },
   {
-    path:'/CheckOut',
+    path:'/CheckOut/:totalAmount',
     name:'CheckOut',
     component:CheckOut
   }
