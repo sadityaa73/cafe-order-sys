@@ -27,12 +27,14 @@
         <div class="total-price">Rs {{ this.totalAmount }}</div>
       </div>
     </div>
+    <checkOut :amount="totalAmount"/>
   </div>
 </template>
 <script>
+import checkOut from "./CheckOut.vue"
 export default {
   name: "PlaceOrder",
-  components: {},
+  components: {checkOut},
   props:{
     cart:Array
   },
@@ -53,7 +55,6 @@ export default {
   },
   methods: {
     payNow() {
-      this.$router.push(`/checkOut/${this.totalAmount}`)
     },
     backToMainMenu() {
       this.orderPlace = false;

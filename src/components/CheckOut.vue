@@ -35,16 +35,20 @@
       </div>
       <div class="buttonContainer">
         <button id="btn-element" @click="submit">
-          pay <span>{{ $route.params.totalAmount }}</span>
+          pay <span>{{ amount }}</span>
         </button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "CheckOut",
   components: {},
+  props:{
+    amount:Number,
+  },
   data() {
     return {
       strip: null,
@@ -109,11 +113,12 @@ export default {
       };
       const cardElement = this.elements.getElement("card");
       let post = {
-        amount: this.$route.params.totalAmount,
+        amount: Math.round(this.amount.toFixed(2)),
       };
+      console.log("amount",typeof(post.amount))
       try {
         let response = await axios.post(
-          "http://localhost:4000/api/stripePayment/create-payment-intent",
+          "http://localhost:3000/api/stripePayment/create-payment-intent",
           post
         );
         let secret = response.data;
@@ -193,6 +198,7 @@ export default {
   margin: 0%;
   background: whitesmoke;
   border-radius: 0px 0px 6px 6px;
+  text-align:center;
   border: none;
 }
 #user-email {
@@ -200,6 +206,7 @@ export default {
   margin: 0%;
   background: whitesmoke;
   border-radius: 0px 0px 6px 6px;
+  text-align:center;
   border: none;
 }
 #address {
@@ -207,6 +214,7 @@ export default {
   margin: 0%;
   background: whitesmoke;
   border-radius: 0px 0px 6px 6px;
+  text-align:center;
   border: none;
 }
 #city {
@@ -214,6 +222,7 @@ export default {
   margin: 0%;
   background: whitesmoke;
   border-radius: 0px 0px 6px 6px;
+  text-align:center;
   border: none;
 }
 #state {
@@ -221,6 +230,7 @@ export default {
   margin: 0%;
   background: whitesmoke;
   border-radius: 0px 0px 6px 6px;
+  text-align:center;
   border: none;
 }
 #zip {
@@ -228,6 +238,7 @@ export default {
   margin: 0%;
   background: whitesmoke;
   border-radius: 0px 0px 6px 6px;
+  text-align:center;
   border: none;
 }
 #card-holder-name {
@@ -235,6 +246,7 @@ export default {
   margin: 0%;
   background: whitesmoke;
   border-radius: 0px 0px 6px 6px;
+  text-align:center;
   border: none;
 }
 #card-details {
@@ -242,6 +254,7 @@ export default {
   margin: 0%;
   background: whitesmoke;
   border-radius: 0px 0px 6px 6px;
+  text-align:center;
   border: none;
 }
 .buttonContainer {

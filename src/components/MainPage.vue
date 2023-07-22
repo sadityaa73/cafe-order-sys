@@ -130,7 +130,7 @@
       </div>
       <div class="order-Btn-Container">
         <button class="Order-Btn" @click="placeOrder">Place Order</button>
-        <div class="total-price">Rs {{ this.totalPrice }}</div>
+        <div class="total-price">Rs {{ getTotalPrice }}</div>
       </div>
     </div>
     <PlaceOrder v-if="orderPlaced" @back="backToMain" :cart="cart" />
@@ -139,6 +139,7 @@
 <script>
 import axios from "axios";
 import PlaceOrder from "./PlaceOrder.vue";
+import { mapMutations,mapGetters } from 'vuex';
 export default {
   components: { PlaceOrder },
   data() {
@@ -150,17 +151,26 @@ export default {
       menuList: [],
       cart: [],
       foodMenu: false,
-      totalPrice: 0,
+      totalAmount: 0,
     };
   },
   created() {
     this.getMenuList();
   },
+  computed:{
+    ...mapGetters(['cartData','getTotalPrice'])
+  },
   methods: {
+    ...mapMutations([
+      'setCart'
+    ]),
     // main api for get list of all the items ;
     async getMenuList() {
       let response = await axios.get("http://localhost:3000/api/menu");
       this.cafeMenu = response.data;
+      let data = this.cafeMenu.filter((element)=>element.productQuantity > 0);
+      this.setCart(data);
+      console.log("printing cart from vuex",this.cartData);
     },
     getAllTypes() {
       this.allTypes = true;
@@ -184,7 +194,9 @@ export default {
         "http://localhost:3000/api/menu/update",
         update
       );
-      await this.getMenuList();
+      setTimeout(()=>{
+        this.getMenuList();
+      },2000);
     },
     //function from decrase oreder amount;
     async decreaseQuantity(id, quantity, price) {
@@ -197,7 +209,6 @@ export default {
           "http://localhost:3000/api/menu/update",
           update
         );
-        await this.getMenuList();
       }
     },
     //funtion for placeing order;
